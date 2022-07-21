@@ -6,12 +6,15 @@ using UnityEngine.UI;
 
 public class InsetPlayerController : MonoBehaviour
 {
+    public QuestionController quesController;
+
     private string current_json;
     [SerializeField] private InputField playerNameText;
+    [SerializeField] private GameObject questionCanvas;
 
-    public void SetPlayerName(string name)
+    public void SetPlayerName(string name, float score, int correctAnswer, float totalTime)
     {
-        StartCoroutine(GetRequest("https://localhost:44311/api/InsertPlayer?name=" + name));
+        StartCoroutine(GetRequest("https://localhost:44311/api/InsertPlayer?name=" + name + "&score=" + score + "&correctAnswers=" + correctAnswer + "&totalTime=" + totalTime));
     }
 
     IEnumerator GetRequest(string uri)
@@ -40,7 +43,10 @@ public class InsetPlayerController : MonoBehaviour
 
     public void NameEntered()
     {
+        string name = playerNameText.text;
 
+        SetPlayerName(name, quesController.totalScore, quesController.correctAnswer, quesController.TimerSecs);
+        quesController.nameEntered = true;
     }
 }
 
